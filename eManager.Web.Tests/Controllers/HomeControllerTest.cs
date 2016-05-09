@@ -6,17 +6,21 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using eManager.Web;
 using eManager.Web.Controllers;
+using eManager.Domain;
 
 namespace eManager.Web.Tests.Controllers
 {
     [TestClass]
     public class HomeControllerTest
     {
+        private IDepartmentDataSource _db;
+
+       
         [TestMethod]
         public void Index()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            HomeController controller = new HomeController(_db);
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
@@ -29,7 +33,7 @@ namespace eManager.Web.Tests.Controllers
         public void About()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            HomeController controller = new HomeController(_db);
 
             // Act
             ViewResult result = controller.About() as ViewResult;
@@ -42,7 +46,7 @@ namespace eManager.Web.Tests.Controllers
         public void Contact()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            HomeController controller = new HomeController(_db);
 
             // Act
             ViewResult result = controller.Contact() as ViewResult;

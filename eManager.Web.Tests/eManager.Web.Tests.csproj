@@ -123,6 +123,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\eManager.Domain\eManager.Domain.csproj">
+      <Project>{b7701caa-2873-458c-b336-5a1690f11b89}</Project>
+      <Name>eManager.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\eManager.Web\eManager.Web.csproj">
       <Project>{74FB67BD-A8DB-434C-B13B-73B39A68DF43}</Project>
       <Name>eManager.Web</Name>

@@ -8,6 +8,7 @@
 <ul>
     @foreach (var department in Model)
     {
-        <li>@department.Name</li>
+        //<li>@department.Name</li>
+      <li>@Html.ActionLink(@department.Name,"detail","department",new { @department.Id},null)</li>  
     }
 </ul>

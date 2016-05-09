@@ -20,6 +20,10 @@ namespace eManager.Web.Infrastructure
         public DbSet<Department> Departments {get;set;}
         public DbSet<UserProfile> UserProfiles { get; set; }
 
+        void IDepartmentDataSource.Save()
+        {
+            SaveChanges();
+        }
 
         IQueryable<Employee> IDepartmentDataSource.Employees
         {
