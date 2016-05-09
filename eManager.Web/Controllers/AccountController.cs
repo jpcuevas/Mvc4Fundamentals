@@ -8,14 +8,13 @@ using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
-using eManager.Web.Filters;
 using eManager.Web.Models;
 using eManager.Web.Infrastructure;
+using eManager.Domain;
 
 namespace eManager.Web.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
     public class AccountController : Controller
     {
         //

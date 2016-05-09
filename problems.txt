@@ -1,0 +1,18 @@
+-error in package manager console : The Role Manager feature has not been enabled.
+add in web config:
+</pages><!--despues de esto -->
+    <roleManager enabled="true" defaultProvider="simple">
+      <providers>
+        <clear/>
+        <add name="simple" type="WebMatrix.WebData.SimpleRoleProvider,
+                              WebMatrix.WebData"/>
+      </providers>
+    </roleManager>
+    <membership defaultProvider="simple">
+      <providers>
+        <clear/>
+        <add name="simple" type="WebMatrix.WebData.SimpleMembershipProvider,
+                              WebMatrix.WebData"/>
+      </providers>
+    </membership>
+  </system.web><!-- antes de esto -->

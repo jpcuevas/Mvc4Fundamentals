@@ -1,10 +1,13 @@
 namespace eManager.Web.Migrations
 {
     using eManager.Domain;
+    using eManager.Web.App_Start;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using System.Web.Security;
+    using WebMatrix.WebData;
 
     internal sealed class Configuration : DbMigrationsConfiguration<eManager.Web.Infrastructure.DepartmentDb>
     {
@@ -21,6 +24,36 @@ namespace eManager.Web.Migrations
                   new Department() { Name = "Shipping" },
                   new Department() { Name = "Human Resources" }
           );
+
+            SeedMembership();  
+        }
+
+        private void SeedMembership()
+        {
+            if (!WebSecurity.Initialized)
+            {
+                Setup.SetupConfig();
+                //throw new NotImplementedException();
+            }
+            var adminUser = "Admin";
+            var user = "jcuevas";
+            var strangeRol = "thisisatest";
+
+            var roles = (SimpleRoleProvider)Roles.Provider;
+            var membership = (SimpleMembershipProvider)Membership.Provider;
+
+            if (!roles.RoleExists(adminUser))
+            {
+                roles.CreateRole(adminUser);
+            }
+            if (membership.GetUser(user, false) == null)
+            {
+                membership.CreateUserAndAccount(user, strangeRol);
+            }
+            if (!roles.GetRolesForUser(user).Contains(adminUser))
+            {
+                roles.AddUsersToRoles(new[] { user }, new[] { adminUser });
+            }
         }
     }
 }
