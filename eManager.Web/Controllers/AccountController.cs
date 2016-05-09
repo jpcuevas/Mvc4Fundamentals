@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using eManager.Web.Filters;
 using eManager.Web.Models;
+using eManager.Web.Infrastructure;
 
 namespace eManager.Web.Controllers
 {
@@ -263,7 +264,7 @@ namespace eManager.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (UsersContext db = new UsersContext())
+                using (DepartmentDb db = new DepartmentDb())
                 {
                     UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // Check if user already exists

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
 using eManager.Web.Models;
+using eManager.Web.Infrastructure;
 
 namespace eManager.Web.Filters
 {
@@ -25,11 +26,11 @@ namespace eManager.Web.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<UsersContext>(null);
+                Database.SetInitializer<DepartmentDb>(null);
 
                 try
                 {
-                    using (var context = new UsersContext())
+                    using (var context = new DepartmentDb())
                     {
                         if (!context.Database.Exists())
                         {
