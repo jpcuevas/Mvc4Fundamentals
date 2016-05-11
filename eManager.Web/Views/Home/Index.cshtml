@@ -55,7 +55,7 @@
             };
 
             return {
-                getVideos: getVideos,
+                getVideos: getVideos
             };
 
         }());
@@ -64,12 +64,12 @@
             var templates = {};
 
             var compileTemplates = function () {
-                templates.videoTable = Handlebars.compile($("#videoTable").html(compileTemplates));
+                templates.videoTable = Handlebars.compile($("#videoTable").html());
             };
 
             var showAllVideos = function (data) {
                 var output = templates.videoTable({ video: data });
-                $("#videoTabloOutput").html(output);
+                $("#videoTableOutput").html(output);
             };
 
             var refreshVideos = function () {
