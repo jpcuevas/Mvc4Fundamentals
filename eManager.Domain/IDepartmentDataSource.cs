@@ -10,6 +10,8 @@ namespace eManager.Domain
     {
         IQueryable<Employee> Employees { get; }
         IQueryable<Department> Departments { get; }
+        IQueryable<Video> Videos { get; }
         void Save();
+        bool ProxyCreationEnable { set; }
     }
 }

@@ -25,6 +25,11 @@ namespace eManager.Web.Migrations
                   new Department() { Name = "Human Resources" }
           );
 
+            context.videos.AddOrUpdate(v => v.Title,
+                new Video() { Title = "MVC4" ,Length = 120},
+                new Video() { Title= "LINQ" ,Length = 200}
+                    );
+
             SeedMembership();  
         }
 

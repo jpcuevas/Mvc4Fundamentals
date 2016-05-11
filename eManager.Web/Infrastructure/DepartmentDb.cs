@@ -19,7 +19,9 @@ namespace eManager.Web.Infrastructure
         public DbSet<Employee> Employes { get; set; }
         public DbSet<Department> Departments {get;set;}
         public DbSet<UserProfile> UserProfiles { get; set; }
-
+        public DbSet<Video> videos { get; set; }
+         
+        
         void IDepartmentDataSource.Save()
         {
             SaveChanges();
@@ -33,6 +35,18 @@ namespace eManager.Web.Infrastructure
         IQueryable<Department> IDepartmentDataSource.Departments
         {
             get { return Departments; }
+        }
+
+
+        bool IDepartmentDataSource.ProxyCreationEnable
+        {
+           set {Configuration.ProxyCreationEnabled = value;} 
+        }
+
+
+        IQueryable<Video> IDepartmentDataSource.Videos
+        {
+            get { return videos; }
         }
     }
 }
