@@ -17,6 +17,12 @@
 
 </div>
 
+<button id="createVideo">Create Video</button>
+
+<div id="videoEditOutput">
+
+</div>
+
 <script id="videoTable" type="text/html">
     <table>
         <thead>
@@ -39,6 +45,18 @@
     </table>
 </script>
 
+<script id="videoEdit" type="text/html">
+    <hr />
+    <form>
+        <input type="hidden" name="id" id="id" value="{{Id}}" />
+        <label for="title">Title:</label>
+        <input type="text" name="Title" id="title" required value="{{Title}}" />
+        <label for="length">Length</label>
+        <input type="number" min="0" max="200" name="Length" id="length" value="{{Length}}" />
+        <input type="submit" id="saveVideo" />
+    </form>
+</script>
+
 @section scripts{
     <script src="~/Scripts/handlebars.js"></script>
     <script>
@@ -50,12 +68,41 @@
                 alert(xhr.status + ":" + xhr.statusText);
             });
 
-            var getVideos = function () {
+            var getVideos = function() {
                 return $.ajax(videoApiUrl);
             };
 
+            var getVideo = function (id) {
+                return $.ajax(videoApiUrl + "/" +id);
+            };
+
+            var updateVideo = function (video) {
+                return $.ajax(videoApiUrl + "/" + video.Id, {
+                    type: "PUT",
+                    data: video
+                });
+            };
+
+            var addVideo = function (video) {
+                return $.ajax(videoApiUrl, {
+                    type: "POST",
+                    data: video
+                });
+            };
+
+            var deleteVideo = function (id) {
+                return $.ajax(videoApiUrl + "/" + id, {
+                    type: "DELETE",
+                    data: id
+                });
+            };
+
             return {
-                getVideos: getVideos
+                deleteVideo: deleteVideo,
+                addVideo: addVideo,
+                updateVideo: updateVideo,
+                getVideos: getVideos,
+                getVideo: getVideo
             };
 
         }());
@@ -65,6 +112,7 @@
 
             var compileTemplates = function () {
                 templates.videoTable = Handlebars.compile($("#videoTable").html());
+                templates.videoEdit = Handlebars.compile($("#videoEdit").html());
             };
 
             var showAllVideos = function (data) {
@@ -72,13 +120,66 @@
                 $("#videoTableOutput").html(output);
             };
 
+            var showVideoForEdit = function (video) {
+                var output = templates.videoEdit(video);
+                $("#videoEditOutput").html(output);
+            }; 
+
             var refreshVideos = function () {
                 videoServer.getVideos().done(showAllVideos);
+            };
+
+            var editVideo = function () {
+                var id = getId(this);
+                videoServer.getVideo(id).done(showVideoForEdit);
+            };
+
+            var createVideo = function () {
+                var video = {Id: 0, Title: "", Length: 0 };
+                showVideoForEdit(video);
+            };
+
+            var deleteVideo = function () {
+                var id = getId(this);
+                videoServer.deleteVideo(id).done(refreshVideos);
+            };
+
+            var clearEdit = function () {
+                $("#videoEditOutput").empty();
+            }
+
+            var saveVideo = function () {
+                var video = {
+                    "Id": $("#id").val(),
+                    "Title": $("#title").val(),
+                    "Length": $("#length").val()
+                };
+
+                var operation;
+                if (video.Id != "0") {
+                    operation = videoServer.updateVideo(video);
+                } else {
+                    operation = videoServer.addVideo(video);
+                }
+                operation.done(refreshVideos, clearEdit);
+                return false;
+            };
+
+            var wireEvents = function () {
+                $(document).on("click", ".editVideo", editVideo);
+                $(document).on("click", "#saveVideo", saveVideo);
+                $(document).on("click", "#createVideo", createVideo);
+                $(document).on("click", ".deleteVideo", deleteVideo);
+            };
+
+            var getId = function (element) {
+                return $(element).parents("tr").attr("data-id");
             }
 
 
             $(function () {
 
+                wireEvents();
                 compileTemplates();
                 refreshVideos();
             });

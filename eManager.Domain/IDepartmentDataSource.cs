@@ -13,5 +13,9 @@ namespace eManager.Domain
         IQueryable<Video> Videos { get; }
         void Save();
         bool ProxyCreationEnable { set; }
+        IQueryable<T> Query<T>() where T : class;
+        void Add<T>(T entity) where T : class;
+        void Update<T>(T entity) where T : class;
+        void Delete<T>(T entity) where T : class;
     }
 }

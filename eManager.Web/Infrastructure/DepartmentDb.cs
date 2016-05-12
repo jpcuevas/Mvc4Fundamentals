@@ -48,5 +48,28 @@ namespace eManager.Web.Infrastructure
         {
             get { return videos; }
         }
+
+
+        IQueryable<T> IDepartmentDataSource.Query<T>()
+        {
+            return Set<T>();
+        }
+
+        void IDepartmentDataSource.Update<T>(T entity)
+        {
+            Entry(entity).State = System.Data.EntityState.Modified;
+        }
+
+
+        void IDepartmentDataSource.Add<T>(T entity)
+        {
+            Set<T>().Add(entity);
+        }
+
+
+        void IDepartmentDataSource.Delete<T>(T entity)
+        {
+            Set<T>().Remove(entity);
+        }
     }
 }

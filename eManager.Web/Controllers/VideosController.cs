@@ -2,6 +2,7 @@
 using eManager.Web.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -33,25 +34,77 @@ namespace eManager.Web.Controllers
         }
 
         // GET api/video/5
-        public string Get(int id)
+        public Video GetVideo(int id)
         {
-            return "value";
-        }
+            var video = _db.Videos.Single(v => v.Id == id);
+            if (video == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
 
-        // POST api/video
-        public Video Post(Video video)
-        {
             return video;
         }
 
-        // PUT api/video/5
-        public void Put(int id, [FromBody]string value)
+        // POST api/video
+        public HttpResponseMessage PostVideo(Video video)
         {
+            if (ModelState.IsValid)
+            {
+                _db.Add<Video>(video);
+                _db.Save();
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, video);
+                response.Headers.Location = new Uri(Url.Link("DefaultApi", new  { id = video.Id }));
+                return response;
+            }
+            else
+            {
+               return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // PUT api/video/5
+        public HttpResponseMessage PutVideo(int id, Video video)
+        {
+            if (ModelState.IsValid && id == video.Id)
+            {
+                _db.Update<Video>(video);
+                try
+                {
+                    _db.Save();
+                }
+                catch(DbUpdateConcurrencyException)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+                return Request.CreateResponse(HttpStatusCode.OK,video);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
 
         // DELETE api/video/5
-        public void Delete(int id)
+        public HttpResponseMessage DeleteVideo(int id)
         {
+            Video video = _db.Query<Video>().Single(v => v.Id == id);
+            if(video == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            _db.Delete<Video>(video);
+
+            try
+            {
+                _db.Save();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, video);
         }
     }
 }
